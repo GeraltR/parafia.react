@@ -1,0 +1,9 @@
+[
+  { "id": 1, "date": "2026-06-23", "time": "7:00", "intention": "+ Jan Kowalski" },
+  { "id": 2, "date": "2026-06-24", "time": "18:00", "intention": "+ Maria Nowak" },
+  { "id": 3, "date": "2026-06-25", "time": "7:00", "intention": "+ Zofia i Jan" },
+  { "id": 4, "date": "2026-06-26", "time": "18:00", "intention": "+ Stanisław Wiśniewski" },
+  { "id": 5, "date": "2026-06-27", "time": "7:00", "intention": "+ Helena" },
+  { "id": 6, "date": "2026-06-28", "time": "18:00", "intention": "+ Anna" },
+  { "id": 7, "date": "2026-06-29", "time": "7:30", "intention": "+ Jan Nowak" }
+]
