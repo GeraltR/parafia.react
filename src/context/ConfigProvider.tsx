@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { fetchSection } from "../api/configClient";
+import { fetchMockSection, fetchSection } from "../api/configClient";
 import type {
   ContactAddresses,
   EventItem,
@@ -22,17 +22,17 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
 
     Promise.all([
-      fetchSection<Theme>("theme"),
-      fetchSection<Navbar>("navbar"),
-      fetchSection<Hero>("hero"),
-      fetchSection<ShortActionItem[]>("shortActions"),
-      fetchSection<ContactAddresses>("contactAddresses"),
-      fetchSection<SocialLinks>("social"),
-      fetchSection<EventItem[]>("events"),
-      fetchSection<NewsItem[]>("news"),
-      fetchSection<MassIntention[]>("massIntentions"),
-      fetchSection<InfoExtra>("infoExtra"),
-      fetchSection<FooterConfig>("footer"),
+      fetchSection<Theme>("/theme"),
+      fetchSection<Navbar>("/navbar"),
+      fetchSection<Hero>("/hero"),
+      fetchSection<ShortActionItem[]>("/short-actions"),
+      fetchSection<ContactAddresses>("/contact-addresses"),
+      fetchSection<SocialLinks>("/social"),
+      fetchSection<EventItem[]>("/events"),
+      fetchSection<NewsItem[]>("/news"),
+      fetchMockSection<MassIntention[]>("massIntentions"),
+      fetchSection<InfoExtra>("/info-extra"),
+      fetchSection<FooterConfig>("/footer"),
     ])
       .then(
         ([
