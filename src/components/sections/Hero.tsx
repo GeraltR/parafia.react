@@ -1,7 +1,8 @@
+import type { CSSProperties } from "react";
 import { useConfig } from "../../context/configHooks";
 import { resolveBodyFont, resolveHeadingFont } from "../../utils/fonts";
 import { HeroButtonIconGlyph } from "../icons/HeroButtonIcons";
-import type { VerticalAlign } from "../../types/config";
+import type { HeroButton as HeroButtonType, VerticalAlign } from "../../types/config";
 
 const V_ALIGN_TO_ITEMS: Record<VerticalAlign, string> = {
   top: "flex-start",
@@ -11,6 +12,15 @@ const V_ALIGN_TO_ITEMS: Record<VerticalAlign, string> = {
 
 function widthStyle(width: number) {
   return { maxWidth: `${(width / 12) * 100}%` };
+}
+
+function buttonColorStyle(button: HeroButtonType): CSSProperties {
+  return {
+    "--btn-bg": button.bgColor ?? "rgba(10,20,40,.7)",
+    "--btn-text": button.textColor ?? "#ffffff",
+    "--btn-bg-hover": button.bgColorHover ?? "var(--color-secondary)",
+    "--btn-text-hover": button.textColorHover ?? "var(--color-primary)",
+  } as CSSProperties;
 }
 
 export function Hero() {
@@ -36,6 +46,7 @@ export function Hero() {
             ...widthStyle(hero.titleWidth),
             fontFamily: resolveHeadingFont(hero.titleFont, theme),
             fontSize: "clamp(2rem, 4.5vw, 3.4rem)",
+            color: hero.titleColor ?? undefined,
           }}
         >
           {title}
@@ -48,6 +59,7 @@ export function Hero() {
               ...widthStyle(hero.subtitleWidth),
               fontFamily: resolveBodyFont(hero.subtitleFont, theme),
               fontSize: "1.1rem",
+              color: hero.subtitleColor ?? undefined,
             }}
           >
             {subtitle}
@@ -74,7 +86,8 @@ export function Hero() {
               href={button.href}
               target={button.external ? "_blank" : undefined}
               rel={button.external ? "noreferrer" : undefined}
-              className="inline-flex items-center gap-2 rounded border border-secondary/55 bg-[rgba(10,20,40,.7)] px-5 py-3 font-body text-[0.8rem] font-bold uppercase tracking-wider text-white backdrop-blur-md transition-colors hover:border-secondary hover:bg-secondary hover:text-primary"
+              style={buttonColorStyle(button)}
+              className="inline-flex items-center gap-2 rounded border border-secondary/55 bg-[var(--btn-bg)] px-5 py-3 font-body text-[0.8rem] font-bold uppercase tracking-wider text-[var(--btn-text)] backdrop-blur-md transition-colors hover:border-secondary hover:bg-[var(--btn-bg-hover)] hover:text-[var(--btn-text-hover)]"
             >
               <HeroButtonIconGlyph
                 icon={button.icon}

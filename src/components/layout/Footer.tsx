@@ -4,7 +4,7 @@ import { SocialLinksRow } from "../SocialLinksRow";
 import { isInternalRoute } from "../../utils/links";
 
 const VIRTUAL_PARISH_URL_B64 =
-  "aHR0cHM6Ly9hcGkucGFyYWZpYS1zemN6YWtvd2EucGwvc3pw";
+  "aHR0cHM6Ly9zenAucGFyYWZpYS1zemN6YWtvd2EucGw=";
 
 export function Footer() {
   const { theme, contactAddresses, social, navbar, footer } = useConfig();
