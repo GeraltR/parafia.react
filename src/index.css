@@ -29,3 +29,82 @@ h3,
 h4 {
   font-family: var(--font-heading);
 }
+
+.rich-content {
+  line-height: 1.7;
+}
+
+.rich-content :first-child {
+  margin-top: 0;
+}
+
+.rich-content p {
+  margin: 0.85em 0;
+}
+
+.rich-content h1 {
+  font-size: 1.75em;
+  font-weight: 700;
+  margin: 1em 0 0.5em;
+}
+
+.rich-content h2 {
+  font-size: 1.4em;
+  font-weight: 700;
+  margin: 1em 0 0.5em;
+}
+
+.rich-content h3 {
+  font-size: 1.15em;
+  font-weight: 700;
+  margin: 1em 0 0.5em;
+}
+
+.rich-content ul {
+  list-style: disc;
+  padding-left: 1.5em;
+  margin: 0.85em 0;
+}
+
+.rich-content ol {
+  list-style: decimal;
+  padding-left: 1.5em;
+  margin: 0.85em 0;
+}
+
+.rich-content blockquote {
+  border-left: 3px solid currentColor;
+  opacity: 0.85;
+  padding-left: 1em;
+  margin: 1em 0;
+}
+
+.rich-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.rich-content a {
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.rich-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.rich-content th,
+.rich-content td {
+  border: 1px solid var(--color-border);
+  padding: 0.4em 0.6em;
+  text-align: left;
+}
+
+.rich-content th {
+  background: var(--color-surface-muted);
+  font-weight: 700;
+}

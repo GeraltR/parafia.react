@@ -4,6 +4,7 @@ import { useConfigState } from "./context/configHooks";
 import { SiteThemeProvider } from "./theme/SiteThemeProvider";
 import { Home } from "./pages/Home";
 import { LegalPage } from "./pages/LegalPage";
+import { ContentPage } from "./pages/ContentPage";
 
 function AppShell() {
   const state = useConfigState();
@@ -24,6 +25,8 @@ function AppShell() {
     <SiteThemeProvider theme={state.config.theme}>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/parafia" element={<ContentPage page="parafia" title="Parafia" />} />
+        <Route path="/liturgia" element={<ContentPage page="liturgia" title="Liturgia" />} />
         <Route path="/polityka-prywatnosci" element={<LegalPage title="Polityka prywatności" />} />
         <Route path="/deklaracja-dostepnosci" element={<LegalPage title="Deklaracja dostępności" />} />
       </Routes>
