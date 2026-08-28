@@ -1,14 +1,16 @@
 import { createContext } from "react";
 import type {
+  AssociationsData,
   ContactAddresses,
   EventItem,
   FooterConfig,
   Hero,
   InfoExtra,
+  MassAndPastorData,
   MassIntention,
   Navbar,
   NewsItem,
-  ShortActionItem,
+  ShortActionsData,
   SocialLinks,
   Theme,
 } from "../types/config";
@@ -17,7 +19,9 @@ export interface SiteConfig {
   theme: Theme;
   navbar: Navbar;
   hero: Hero;
-  shortActions: ShortActionItem[];
+  shortActions: ShortActionsData;
+  massAndPastor: MassAndPastorData;
+  associations: AssociationsData;
   contactAddresses: ContactAddresses;
   social: SocialLinks;
   events: EventItem[];
