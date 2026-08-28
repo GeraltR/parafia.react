@@ -29,7 +29,10 @@ export function Sakramenty() {
   useEffect(() => {
     fetchContentTopics("sakramenty")
       .then(setTopics)
-      .catch(() => setTopics([]));
+      .catch((error: unknown) => {
+        console.error('Nie udało się wczytać sekcji "Sakramenty" (/content-topics?page=sakramenty):', error);
+        setTopics([]);
+      });
   }, []);
 
   if (topics.length === 0) {

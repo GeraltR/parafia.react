@@ -18,7 +18,10 @@ export function ContentPage({ page, title }: { page: ContentPageSlug; title: str
         setSelectedId(data[0]?.id ?? null);
         setStatus("ready");
       })
-      .catch(() => setStatus("error"));
+      .catch((error: unknown) => {
+        console.error(`Nie udało się wczytać treści (/content-topics?page=${page}):`, error);
+        setStatus("error");
+      });
   }, [page]);
 
   const selected = topics.find((topic) => topic.id === selectedId) ?? null;

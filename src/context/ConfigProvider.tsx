@@ -17,6 +17,44 @@ import type {
 } from "../types/config";
 import { ConfigContext, type ConfigState } from "./configContext";
 
+const EMPTY_NAVBAR: Navbar = { items: [] };
+const EMPTY_CONTACT_ADDRESSES: ContactAddresses = {
+  id: 0,
+  address: "",
+  phone: "",
+  social: {
+    facebook: false,
+    youtube: false,
+    x: false,
+    instagram: false,
+    tiktok: false,
+    pinterest: false,
+    linkedin: false,
+  },
+};
+const EMPTY_SOCIAL_LINKS: SocialLinks = {
+  facebook: "",
+  youtube: "",
+  x: "",
+  instagram: "",
+  tiktok: "",
+  pinterest: "",
+  linkedin: "",
+};
+
+/** Fetches a section; on failure logs to the console and resolves with `fallback` instead of rejecting. */
+function fetchOrFallback<T>(path: string, label: string, fallback: T): Promise<T> {
+  return fetchSection<T>(path).catch((error: unknown) => {
+    console.error(`Nie udało się wczytać sekcji "${label}" (${path}):`, error);
+    return fallback;
+  });
+}
+
+/** Fetches an optional content section; on failure logs to the console and resolves with `null` (section hides itself). */
+function fetchOrNull<T>(path: string, label: string): Promise<T | null> {
+  return fetchOrFallback<T | null>(path, label, null);
+}
+
 export function ConfigProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<ConfigState>({ status: "loading" });
 
@@ -24,33 +62,39 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
 
     Promise.all([
+      // Theme is the one truly required section: without it there is no color
+      // palette or font to render the page shell with, so its failure still
+      // surfaces as a page-level error.
       fetchSection<Theme>("/theme"),
-      fetchSection<Navbar>("/navbar"),
-      fetchSection<Hero>("/hero"),
-      fetchSection<ShortActionsData>("/short-actions"),
-      fetchSection<MassAndPastorData>("/mass-and-pastor"),
-      fetchSection<AssociationsData>("/associations"),
-      fetchSection<ContactAddresses>("/contact-addresses"),
-      fetchSection<SocialLinks>("/social"),
-      fetchSection<EventItem[]>("/events"),
-      fetchSection<NewsItem[]>("/news"),
-      fetchMockSection<MassIntention[]>("massIntentions"),
-      fetchSection<InfoExtra>("/info-extra"),
-      fetchSection<FooterConfig>("/footer"),
+      fetchOrFallback<Navbar>("/navbar", "Nawigacja", EMPTY_NAVBAR),
+      fetchOrFallback<ContactAddresses>("/contact-addresses", "Dane kontaktowe", EMPTY_CONTACT_ADDRESSES),
+      fetchOrFallback<SocialLinks>("/social", "Media społecznościowe", EMPTY_SOCIAL_LINKS),
+      fetchOrFallback<EventItem[]>("/events", "Wydarzenia", []),
+      fetchOrFallback<NewsItem[]>("/news", "Aktualności", []),
+      fetchMockSection<MassIntention[]>("massIntentions").catch((error: unknown) => {
+        console.error('Nie udało się wczytać sekcji "Intencje mszalne" (massIntentions):', error);
+        return [];
+      }),
+      fetchOrNull<Hero>("/hero", "Hero"),
+      fetchOrNull<ShortActionsData>("/short-actions", "Skróty"),
+      fetchOrNull<MassAndPastorData>("/mass-and-pastor", "Msze i Duszpasterze"),
+      fetchOrNull<AssociationsData>("/associations", "Wspólnoty i stowarzyszenia"),
+      fetchOrNull<InfoExtra>("/info-extra", "Wsparcie"),
+      fetchOrNull<FooterConfig>("/footer", "Stopka"),
     ])
       .then(
         ([
           theme,
           navbar,
-          hero,
-          shortActions,
-          massAndPastor,
-          associations,
           contactAddresses,
           social,
           events,
           news,
           massIntentions,
+          hero,
+          shortActions,
+          massAndPastor,
+          associations,
           infoExtra,
           footer,
         ]) => {
@@ -60,15 +104,15 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
             config: {
               theme,
               navbar,
-              hero,
-              shortActions,
-              massAndPastor,
-              associations,
               contactAddresses,
               social,
               events,
               news,
               massIntentions,
+              hero,
+              shortActions,
+              massAndPastor,
+              associations,
               infoExtra,
               footer,
             },

@@ -2,6 +2,11 @@ import { useConfig } from "../../context/configHooks";
 
 export function InfoExtra() {
   const { infoExtra } = useConfig();
+
+  if (!infoExtra) {
+    return null;
+  }
+
   const [beforeImage, afterImage] = infoExtra.images;
   const progressPercent = Math.min(100, Math.max(0, infoExtra.progressPercent));
 

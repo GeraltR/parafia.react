@@ -75,6 +75,11 @@ function PastorCard({
 
 export function MassAndPastor() {
   const { massAndPastor } = useConfig();
+
+  if (!massAndPastor) {
+    return null;
+  }
+
   const { config, massTimes, pastors } = massAndPastor;
 
   const positionStyle: CSSProperties = {

@@ -70,6 +70,11 @@ function AssociationCard({ association, nameStyle }: { association: Association;
 
 export function Associations() {
   const { associations } = useConfig();
+
+  if (!associations) {
+    return null;
+  }
+
   const { config, items } = associations;
 
   if (items.length === 0) {

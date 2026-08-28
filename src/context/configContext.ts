@@ -17,18 +17,22 @@ import type {
 
 export interface SiteConfig {
   theme: Theme;
+  // Structural / chrome sections: always present, degrade to an empty-but-valid
+  // shape if their fetch fails so Header/Footer/TopBar never have to hide.
   navbar: Navbar;
-  hero: Hero;
-  shortActions: ShortActionsData;
-  massAndPastor: MassAndPastorData;
-  associations: AssociationsData;
   contactAddresses: ContactAddresses;
   social: SocialLinks;
   events: EventItem[];
   news: NewsItem[];
   massIntentions: MassIntention[];
-  infoExtra: InfoExtra;
-  footer: FooterConfig;
+  // Optional content sections: null if their fetch failed, in which case the
+  // section component hides itself instead of crashing the whole page.
+  hero: Hero | null;
+  shortActions: ShortActionsData | null;
+  massAndPastor: MassAndPastorData | null;
+  associations: AssociationsData | null;
+  infoExtra: InfoExtra | null;
+  footer: FooterConfig | null;
 }
 
 export type ConfigState =

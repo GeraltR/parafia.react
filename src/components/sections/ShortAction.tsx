@@ -68,6 +68,11 @@ function ShortActionCard({
 
 export function ShortAction() {
   const { shortActions } = useConfig();
+
+  if (!shortActions) {
+    return null;
+  }
+
   const { config, items } = shortActions;
 
   const titleStyle: CSSProperties = {

@@ -26,6 +26,10 @@ function buttonColorStyle(button: HeroButtonType): CSSProperties {
 export function Hero() {
   const { theme, hero } = useConfig();
 
+  if (!hero) {
+    return null;
+  }
+
   const title = hero.title || theme.title;
   const subtitle = hero.subtitle || theme.subtitle;
 

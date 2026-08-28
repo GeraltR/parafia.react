@@ -9,6 +9,10 @@ const VIRTUAL_PARISH_URL_B64 =
 export function Footer() {
   const { theme, contactAddresses, social, navbar, footer } = useConfig();
 
+  if (!footer) {
+    return null;
+  }
+
   return (
     <footer className="bg-primary text-white/70">
       <div className="px-6 py-12 md:py-14">
