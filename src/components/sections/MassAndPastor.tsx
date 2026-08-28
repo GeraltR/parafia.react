@@ -80,7 +80,8 @@ export function MassAndPastor() {
     return null;
   }
 
-  const { config, massTimes, pastors } = massAndPastor;
+  const { config, massTimes } = massAndPastor;
+  const pastors = massAndPastor.pastors.filter((pastor) => pastor.isActive);
 
   const positionStyle: CSSProperties = {
     fontFamily: config.positionFont ?? "var(--font-body)",
