@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { fetchMockSection, fetchSection } from "../api/configClient";
+import { fetchSection } from "../api/configClient";
 import type {
   AssociationsData,
   ContactAddresses,
@@ -8,7 +8,7 @@ import type {
   Hero,
   InfoExtra,
   MassAndPastorData,
-  MassIntention,
+  MassIntentionsData,
   Navbar,
   NewsItem,
   ShortActionsData,
@@ -41,6 +41,10 @@ const EMPTY_SOCIAL_LINKS: SocialLinks = {
   pinterest: "",
   linkedin: "",
 };
+const EMPTY_MASS_INTENTIONS: MassIntentionsData = {
+  config: { holidayDescribedColor: "#7bdcb5", holidayPlainColor: "#f78da7", weekdayColor: "#8ed1fc" },
+  items: [],
+};
 
 /** Fetches a section; on failure logs to the console and resolves with `fallback` instead of rejecting. */
 function fetchOrFallback<T>(path: string, label: string, fallback: T): Promise<T> {
@@ -71,10 +75,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
       fetchOrFallback<SocialLinks>("/social", "Media społecznościowe", EMPTY_SOCIAL_LINKS),
       fetchOrFallback<EventItem[]>("/events", "Wydarzenia", []),
       fetchOrFallback<NewsItem[]>("/news", "Aktualności", []),
-      fetchMockSection<MassIntention[]>("massIntentions").catch((error: unknown) => {
-        console.error('Nie udało się wczytać sekcji "Intencje mszalne" (massIntentions):', error);
-        return [];
-      }),
+      fetchOrFallback<MassIntentionsData>("/mass-intentions", "Intencje mszalne", EMPTY_MASS_INTENTIONS),
       fetchOrNull<Hero>("/hero", "Hero"),
       fetchOrNull<ShortActionsData>("/short-actions", "Skróty"),
       fetchOrNull<MassAndPastorData>("/mass-and-pastor", "Msze i Duszpasterze"),

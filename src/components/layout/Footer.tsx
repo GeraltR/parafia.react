@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useConfig } from "../../context/configHooks";
 import { SocialLinksRow } from "../SocialLinksRow";
@@ -13,8 +14,17 @@ export function Footer() {
     return null;
   }
 
+  const headingStyle: CSSProperties = {
+    fontFamily: footer.config.titleFont ?? undefined,
+    fontSize: footer.config.titleSize ?? undefined,
+    color: footer.config.titleColor ?? undefined,
+  };
+
   return (
-    <footer className="bg-primary text-white/70">
+    <footer
+      className="bg-primary text-white/70"
+      style={footer.config.bgColor ? { backgroundColor: footer.config.bgColor } : undefined}
+    >
       <div className="px-6 py-12 md:py-14">
         <div className="mx-auto grid max-w-[1180px] gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -47,7 +57,10 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-3.5 font-body text-[0.74rem] font-bold uppercase tracking-wider text-white">
+            <h4
+              style={headingStyle}
+              className="mb-3.5 font-body text-[0.74rem] font-bold uppercase tracking-wider text-white"
+            >
               Szybkie linki
             </h4>
             <ul className="space-y-1.5 font-body text-[0.8rem]">
@@ -76,8 +89,11 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-3.5 font-body text-[0.74rem] font-bold uppercase tracking-wider text-white">
-              Godziny otwarcia kancelarii
+            <h4
+              style={headingStyle}
+              className="mb-3.5 font-body text-[0.74rem] font-bold uppercase tracking-wider text-white"
+            >
+              {footer.officeTitle}
             </h4>
             {footer.officeHours.map((row) => (
               <div
@@ -94,7 +110,10 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-3.5 font-body text-[0.74rem] font-bold uppercase tracking-wider text-white">
+            <h4
+              style={headingStyle}
+              className="mb-3.5 font-body text-[0.74rem] font-bold uppercase tracking-wider text-white"
+            >
               Znajdź nas na mapie
             </h4>
             <div className="h-[112px] overflow-hidden rounded-md">

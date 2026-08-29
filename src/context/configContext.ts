@@ -7,7 +7,7 @@ import type {
   Hero,
   InfoExtra,
   MassAndPastorData,
-  MassIntention,
+  MassIntentionsData,
   Navbar,
   NewsItem,
   ShortActionsData,
@@ -24,7 +24,7 @@ export interface SiteConfig {
   social: SocialLinks;
   events: EventItem[];
   news: NewsItem[];
-  massIntentions: MassIntention[];
+  massIntentions: MassIntentionsData;
   // Optional content sections: null if their fetch failed, in which case the
   // section component hides itself instead of crashing the whole page.
   hero: Hero | null;

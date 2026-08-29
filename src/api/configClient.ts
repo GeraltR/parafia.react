@@ -10,11 +10,3 @@ export async function fetchSection<T>(path: string): Promise<T> {
   const json = await response.json();
   return (Object.prototype.hasOwnProperty.call(json, "data") ? json.data : json) as T;
 }
-
-export async function fetchMockSection<T>(name: string): Promise<T> {
-  const response = await fetch(`/mock/${name}.json`);
-  if (!response.ok) {
-    throw new Error(`Failed to load config section "${name}" (HTTP ${response.status})`);
-  }
-  return (await response.json()) as T;
-}
