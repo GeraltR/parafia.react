@@ -23,12 +23,12 @@ export function Modal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-0 sm:items-center sm:p-6"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-0 sm:items-center sm:p-6"
       onClick={onClose}
       role="presentation"
     >
       <div
-        className="relative min-h-svh w-full bg-white p-6 shadow-xl sm:min-h-0 sm:max-w-xl sm:rounded-xl sm:p-8"
+        className="relative flex h-svh w-full flex-col bg-white shadow-xl sm:h-auto sm:max-h-[85vh] sm:max-w-xl sm:rounded-xl"
         onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -41,7 +41,7 @@ export function Modal({
         >
           ✕
         </button>
-        {children}
+        <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">{children}</div>
       </div>
     </div>
   );

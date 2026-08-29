@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatEventDay,
   formatEventTime,
-  formatIntentionDay,
+  formatIntentionGroupHeader,
   formatNewsDate,
 } from "./dates";
 
@@ -34,12 +34,12 @@ describe("formatNewsDate", () => {
   });
 });
 
-describe("formatIntentionDay", () => {
-  it("formats as short weekday and zero-padded day.month", () => {
-    expect(formatIntentionDay("2026-07-05")).toBe("Nd 05.07");
+describe("formatIntentionGroupHeader", () => {
+  it("returns the full Polish weekday name and the plain day number", () => {
+    expect(formatIntentionGroupHeader("2026-07-05")).toEqual({ weekdayFull: "niedziela", day: 5 });
   });
 
-  it("zero-pads single digit day and month", () => {
-    expect(formatIntentionDay("2026-01-01")).toBe("Cz 01.01");
+  it("does not zero-pad the day number", () => {
+    expect(formatIntentionGroupHeader("2026-01-01")).toEqual({ weekdayFull: "czwartek", day: 1 });
   });
 });

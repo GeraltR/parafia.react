@@ -1,4 +1,3 @@
-const WEEKDAY_SHORT_PL = ["Nd", "Pn", "Wt", "Śr", "Cz", "Pt", "Sb"];
 const WEEKDAY_FULL_PL = [
   "niedziela",
   "poniedziałek",
@@ -44,9 +43,7 @@ export function formatNewsDate(iso: string): string {
   return `${date.getDate()} ${MONTH_FULL_PL[date.getMonth()]} ${date.getFullYear()}`;
 }
 
-export function formatIntentionDay(iso: string): string {
+export function formatIntentionGroupHeader(iso: string): { weekdayFull: string; day: number } {
   const date = parseIsoDate(iso);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  return `${WEEKDAY_SHORT_PL[date.getDay()]} ${day}.${month}`;
+  return { weekdayFull: WEEKDAY_FULL_PL[date.getDay()], day: date.getDate() };
 }

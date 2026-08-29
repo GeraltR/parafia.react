@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Modal } from "../Modal";
 import { useConfig } from "../../context/configHooks";
-import { formatEventDay, formatEventTime, formatIntentionDay, formatNewsDate } from "../../utils/dates";
+import { formatEventDay, formatEventTime, formatIntentionGroupHeader, formatNewsDate } from "../../utils/dates";
 import type { EventItem, MassIntention, MassIntentionsConfig, NewsItem } from "../../types/config";
 
 interface IntentionDayGroup {
@@ -22,6 +22,23 @@ function groupIntentionsByDay(items: MassIntention[]): IntentionDayGroup[] {
     }
   }
   return groups;
+}
+
+/** A day's line count as displayed: the day-description line (if any) plus one line per mass. */
+function groupLineCount(group: IntentionDayGroup): number {
+  return (group.dayDescription ? 1 : 0) + group.rows.length;
+}
+
+/** Takes whole day-groups until at least `minLines` displayed lines are covered, always including the full day that crosses the threshold. */
+function takeInitialGroups(groups: IntentionDayGroup[], minLines: number): IntentionDayGroup[] {
+  const result: IntentionDayGroup[] = [];
+  let lineCount = 0;
+  for (const group of groups) {
+    result.push(group);
+    lineCount += groupLineCount(group);
+    if (lineCount >= minLines) break;
+  }
+  return result;
 }
 
 function dayGroupColor(config: MassIntentionsConfig, group: IntentionDayGroup): string {
@@ -82,29 +99,66 @@ function NewsModal({ news, onClose }: { news: NewsItem; onClose: () => void }) {
   );
 }
 
-const INTENTIONS_INITIAL_DAYS = 5;
-const INTENTIONS_SCROLL_OFFSET_PX = 100; // roughly 3 intention rows, so the header isn't flush with the viewport edge
+function IntentionDayGroupView({ group, config }: { group: IntentionDayGroup; config: MassIntentionsConfig }) {
+  const { weekdayFull, day } = formatIntentionGroupHeader(group.date);
+  const color = dayGroupColor(config, group);
+  return (
+    <div className="border-b border-border py-2 last:border-b-0">
+      <div className="mb-1 font-body text-[0.64rem] font-bold uppercase tracking-wider" style={{ color }}>
+        {weekdayFull}
+      </div>
+      <div className="flex items-start gap-2">
+        <div
+          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded font-heading text-[0.9rem] font-black text-primary"
+          style={{ backgroundColor: color }}
+        >
+          {day}
+        </div>
+        <div className="min-w-0 flex-1">
+          {group.dayDescription && (
+            <div className="pt-1 pb-0.5 font-body text-[0.82rem] leading-snug font-bold text-primary">{group.dayDescription}</div>
+          )}
+          {group.rows.map((row) => (
+            <div key={`mass-intention-${row.id}`} className="flex gap-2 py-0.5 font-body text-[0.78rem] leading-snug">
+              <span className="w-11 flex-shrink-0 text-right font-bold text-secondary">{row.time}</span>
+              <span className="text-ink">{row.intention}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function IntentionsModal({
+  groups,
+  config,
+  onClose,
+}: {
+  groups: IntentionDayGroup[];
+  config: MassIntentionsConfig;
+  onClose: () => void;
+}) {
+  return (
+    <Modal onClose={onClose}>
+      <h2 className="mb-3 font-heading text-xl font-black text-primary">Intencje mszalne</h2>
+      {groups.map((group) => (
+        <IntentionDayGroupView key={`intention-day-${group.date}`} group={group} config={config} />
+      ))}
+    </Modal>
+  );
+}
+
+const INTENTIONS_INITIAL_LINES = 10;
 
 export function Articles() {
   const { events, news, massIntentions } = useConfig();
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
-  const [showAllIntentions, setShowAllIntentions] = useState(false);
-  const intentionsRef = useRef<HTMLDivElement>(null);
+  const [showIntentionsModal, setShowIntentionsModal] = useState(false);
   const intentionGroups = groupIntentionsByDay(massIntentions.items);
-  const visibleIntentionGroups = showAllIntentions
-    ? intentionGroups
-    : intentionGroups.slice(0, INTENTIONS_INITIAL_DAYS);
-  const hiddenIntentionDays = intentionGroups.length - INTENTIONS_INITIAL_DAYS;
-
-  function toggleIntentions() {
-    if (showAllIntentions && intentionsRef.current) {
-      const top =
-        intentionsRef.current.getBoundingClientRect().top + window.scrollY - INTENTIONS_SCROLL_OFFSET_PX;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-    setShowAllIntentions((prev) => !prev);
-  }
+  const initialIntentionGroups = takeInitialGroups(intentionGroups, INTENTIONS_INITIAL_LINES);
+  const hiddenIntentionDays = intentionGroups.length - initialIntentionGroups.length;
 
   return (
     <section id="aktualnosci" className="bg-white py-14">
@@ -156,40 +210,23 @@ export function Articles() {
             ))}
           </div>
 
-          <div ref={intentionsRef}>
+          <div>
             <div className="mb-5 flex items-baseline justify-between border-b-2 border-primary pb-2.5">
               <h2 className="font-heading text-[1.05rem] font-black tracking-tight text-primary">Intencje mszalne</h2>
               <span className="font-body text-[0.72rem] text-ink-soft">Najbliższe {intentionGroups.length} dni</span>
             </div>
-            <div className="overflow-hidden rounded-md border border-border">
-              {visibleIntentionGroups.map((group) => (
-                <div key={`intention-day-${group.date}`}>
-                  <div
-                    className="px-2.5 py-1.5 font-body text-[0.72rem] font-bold text-ink"
-                    style={{ backgroundColor: dayGroupColor(massIntentions.config, group) }}
-                  >
-                    {formatIntentionDay(group.date)}
-                    {group.dayDescription && ` — ${group.dayDescription}`}
-                  </div>
-                  {group.rows.map((row) => (
-                    <div
-                      key={`mass-intention-${row.id}`}
-                      className="flex gap-2 border-b border-border px-2.5 py-2 font-body text-[0.78rem]"
-                    >
-                      <span className="flex-shrink-0 font-bold text-secondary">{row.time}</span>
-                      <span className="text-ink">{row.intention}</span>
-                    </div>
-                  ))}
-                </div>
+            <div>
+              {initialIntentionGroups.map((group) => (
+                <IntentionDayGroupView key={`intention-day-${group.date}`} group={group} config={massIntentions.config} />
               ))}
             </div>
             {hiddenIntentionDays > 0 && (
               <button
                 type="button"
-                onClick={toggleIntentions}
+                onClick={() => setShowIntentionsModal(true)}
                 className="mt-3.5 block w-full rounded bg-primary py-2.5 text-center font-body text-[0.76rem] font-bold uppercase tracking-wider text-white transition-colors hover:bg-primary-dark"
               >
-                {showAllIntentions ? "Pokaż mniej" : `Pokaż więcej (+${hiddenIntentionDays} dni)`}
+                {`Pokaż więcej (+${hiddenIntentionDays} dni)`}
               </button>
             )}
           </div>
@@ -198,6 +235,13 @@ export function Articles() {
 
       {selectedEvent && <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
       {selectedNews && <NewsModal news={selectedNews} onClose={() => setSelectedNews(null)} />}
+      {showIntentionsModal && (
+        <IntentionsModal
+          groups={intentionGroups}
+          config={massIntentions.config}
+          onClose={() => setShowIntentionsModal(false)}
+        />
+      )}
     </section>
   );
 }
