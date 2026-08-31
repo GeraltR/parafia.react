@@ -5,7 +5,7 @@ import type {
   EventItem,
   FooterConfig,
   Hero,
-  InfoExtra,
+  InfoItem,
   MassAndPastorData,
   MassIntentionsData,
   Navbar,
@@ -25,13 +25,13 @@ export interface SiteConfig {
   events: EventItem[];
   news: NewsItem[];
   massIntentions: MassIntentionsData;
+  infoItems: InfoItem[];
   // Optional content sections: null if their fetch failed, in which case the
   // section component hides itself instead of crashing the whole page.
   hero: Hero | null;
   shortActions: ShortActionsData | null;
   massAndPastor: MassAndPastorData | null;
   associations: AssociationsData | null;
-  infoExtra: InfoExtra | null;
   footer: FooterConfig | null;
 }
 

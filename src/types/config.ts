@@ -153,15 +153,17 @@ export interface MassIntentionsData {
   items: MassIntention[];
 }
 
-export interface InfoExtra {
+export interface InfoItem {
   id: number;
+  validFrom: string;
+  validTo: string;
   title: string;
+  shortInfo: string;
   description: string;
-  images: string[]; 
-  progressPercent: number;
-  bankAccount: string;
-  donationUrl: string;
-  active: boolean;
+  image: string;
+  progressValue: number;
+  progressDescription: string;
+  information: string | null;
 }
 
 export interface OfficeHour {
