@@ -24,7 +24,7 @@ function buttonColorStyle(button: HeroButtonType): CSSProperties {
 }
 
 export function Hero() {
-  const { theme, hero } = useConfig();
+  const { theme, hero, infoItems } = useConfig();
 
   if (!hero) {
     return null;
@@ -32,6 +32,7 @@ export function Hero() {
 
   const title = hero.title || theme.title;
   const subtitle = hero.subtitle || theme.subtitle;
+  const bannerItem = infoItems.find((item) => Boolean(item.bannerText?.trim()));
 
   return (
     <section
@@ -42,6 +43,41 @@ export function Hero() {
         alignItems: V_ALIGN_TO_ITEMS[hero.titleVAlign],
       }}
     >
+      {bannerItem && (
+        <a
+          href="#infoextra"
+          className="absolute inset-x-0 top-0 z-30 block h-9 overflow-hidden"
+          style={{ backgroundColor: bannerItem.bannerBgColor ?? "#0d1e35" }}
+        >
+          {bannerItem.bannerDurationSeconds > 0 ? (
+            [0, 1].map((copy) => (
+              <span
+                key={copy}
+                className="animate-marquee absolute top-1/2 -translate-y-1/2 whitespace-nowrap font-body text-sm font-semibold"
+                style={{
+                  animationDuration: `${bannerItem.bannerDurationSeconds}s`,
+                  animationDelay: copy === 1 ? `${bannerItem.bannerDurationSeconds / 2}s` : "0s",
+                  animationFillMode: "backwards",
+                  fontFamily: resolveBodyFont(bannerItem.bannerFont ?? "", theme),
+                  color: bannerItem.bannerTextColor ?? "#ffffff",
+                }}
+              >
+                {bannerItem.bannerText}
+              </span>
+            ))
+          ) : (
+            <p
+              className="flex h-full items-center justify-center whitespace-nowrap font-body text-sm font-semibold"
+              style={{
+                fontFamily: resolveBodyFont(bannerItem.bannerFont ?? "", theme),
+                color: bannerItem.bannerTextColor ?? "#ffffff",
+              }}
+            >
+              {bannerItem.bannerText}
+            </p>
+          )}
+        </a>
+      )}
       <div className="absolute inset-0 bg-gradient-to-b from-[rgba(5,14,28,.28)] via-[rgba(5,14,28,.6)] to-[rgba(5,14,28,.82)]" />
       <div className="relative z-10 mx-auto w-full max-w-[1180px] px-6">
         <h1

@@ -164,6 +164,11 @@ export interface InfoItem {
   progressValue: number;
   progressDescription: string;
   information: string | null;
+  bannerText: string | null;
+  bannerFont: string | null;
+  bannerTextColor: string | null;
+  bannerBgColor: string | null;
+  bannerDurationSeconds: number;
 }
 
 export interface OfficeHour {

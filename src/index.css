@@ -38,6 +38,21 @@ h4 {
   margin-top: 0;
 }
 
+@keyframes marquee {
+  from {
+    left: 100%;
+  }
+  to {
+    left: -100%;
+  }
+}
+
+.animate-marquee {
+  animation-name: marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
 .rich-content p {
   margin: 0.85em 0;
 }
