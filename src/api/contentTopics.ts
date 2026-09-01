@@ -1,6 +1,14 @@
 import { fetchSection } from "./configClient";
-import type { ContentPageSlug, ContentTopic } from "../types/config";
+import type { ContentTopic } from "../types/config";
 
-export function fetchContentTopics(page: ContentPageSlug): Promise<ContentTopic[]> {
-  return fetchSection<ContentTopic[]>(`/content-topics?page=${page}`);
+export function fetchSakramentyTopics(): Promise<ContentTopic[]> {
+  return fetchSection<ContentTopic[]>("/sakramenty-topics");
+}
+
+export function fetchParafiaTopics(): Promise<ContentTopic[]> {
+  return fetchSection<ContentTopic[]>("/parafia-topics");
+}
+
+export function fetchLiturgiaTopics(): Promise<ContentTopic[]> {
+  return fetchSection<ContentTopic[]>("/liturgia-topics");
 }

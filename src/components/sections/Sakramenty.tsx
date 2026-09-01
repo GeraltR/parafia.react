@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Collapse } from "@mui/material";
-import { fetchContentTopics } from "../../api/contentTopics";
+import { fetchSakramentyTopics } from "../../api/contentTopics";
 import { TopicIcon } from "../TopicIcon";
 import type { ContentTopic } from "../../types/config";
 
@@ -27,10 +27,10 @@ export function Sakramenty() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchContentTopics("sakramenty")
+    fetchSakramentyTopics()
       .then(setTopics)
       .catch((error: unknown) => {
-        console.error('Nie udało się wczytać sekcji "Sakramenty" (/content-topics?page=sakramenty):', error);
+        console.error('Nie udało się wczytać sekcji "Sakramenty" (/sakramenty-topics):', error);
         setTopics([]);
       });
   }, []);

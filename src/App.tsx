@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { fetchLiturgiaTopics, fetchParafiaTopics } from "./api/contentTopics";
 import { ConfigProvider } from "./context/ConfigProvider";
 import { useConfigState } from "./context/configHooks";
 import { SiteThemeProvider } from "./theme/SiteThemeProvider";
@@ -26,8 +27,8 @@ function AppShell() {
     <SiteThemeProvider theme={state.config.theme}>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/parafia" element={<ContentPage page="parafia" title="Parafia" />} />
-        <Route path="/liturgia" element={<ContentPage page="liturgia" title="Liturgia" />} />
+        <Route path="/parafia" element={<ContentPage title="Parafia" fetchTopics={fetchParafiaTopics} />} />
+        <Route path="/liturgia" element={<ContentPage title="Liturgia" fetchTopics={fetchLiturgiaTopics} />} />
         <Route path="/polityka-prywatnosci" element={<LegalPage title="Polityka prywatności" />} />
         <Route path="/deklaracja-dostepnosci" element={<LegalPage title="Deklaracja dostępności" />} />
       </Routes>

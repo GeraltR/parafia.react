@@ -204,8 +204,6 @@ export interface FooterConfig {
   config: FooterStyleConfig;
 }
 
-export type ContentPageSlug = "sakramenty" | "parafia" | "liturgia";
-
 export interface ContentTopicAuthor {
   id: number;
   name: string;
@@ -213,7 +211,6 @@ export interface ContentTopicAuthor {
 
 export interface ContentTopic {
   id: number;
-  page: ContentPageSlug;
   iconUrl: string | null;
   title: string;
   content: string;

@@ -79,7 +79,7 @@ export function ConfigProvider({ children }: { children: ReactNode }) {
       fetchOrFallback<EventItem[]>("/events", "Wydarzenia", []),
       fetchOrFallback<NewsItem[]>("/news", "Aktualności", []),
       fetchOrFallback<MassIntentionsData>("/mass-intentions", "Intencje mszalne", EMPTY_MASS_INTENTIONS),
-      fetchOrFallback<InfoItem[]>("/informacje", "Informacje", []),
+      fetchOrFallback<InfoItem[]>("/informacje", "Informacje dodatkowe", []),
       fetchOrNull<Hero>("/hero", "Hero"),
       fetchOrNull<ShortActionsData>("/short-actions", "Skróty"),
       fetchOrNull<MassAndPastorData>("/mass-and-pastor", "Msze i Duszpasterze"),

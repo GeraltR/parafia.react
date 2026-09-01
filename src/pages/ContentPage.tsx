@@ -1,28 +1,34 @@
 import { useEffect, useState } from "react";
-import { fetchContentTopics } from "../api/contentTopics";
 import { TopBar } from "../components/layout/TopBar";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import { TopicIcon } from "../components/TopicIcon";
-import type { ContentPageSlug, ContentTopic } from "../types/config";
+import type { ContentTopic } from "../types/config";
 
-export function ContentPage({ page, title }: { page: ContentPageSlug; title: string }) {
+export function ContentPage({
+  title,
+  fetchTopics,
+}: {
+  title: string;
+  fetchTopics: () => Promise<ContentTopic[]>;
+}) {
   const [topics, setTopics] = useState<ContentTopic[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
-    fetchContentTopics(page)
+    fetchTopics()
       .then((data) => {
         setTopics(data);
         setSelectedId(data[0]?.id ?? null);
         setStatus("ready");
       })
       .catch((error: unknown) => {
-        console.error(`Nie udało się wczytać treści (/content-topics?page=${page}):`, error);
+        console.error(`Nie udało się wczytać treści "${title}":`, error);
         setStatus("error");
       });
-  }, [page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const selected = topics.find((topic) => topic.id === selectedId) ?? null;
 
