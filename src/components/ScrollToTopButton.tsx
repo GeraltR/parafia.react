@@ -22,7 +22,7 @@ export function ScrollToTopButton() {
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Przewiń do góry"
-      className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white opacity-20 shadow-lg transition-opacity hover:opacity-100"
+      className="fixed bottom-24 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white opacity-20 shadow-lg transition-opacity hover:opacity-100"
     >
       <KeyboardDoubleArrowUpIcon />
     </button>

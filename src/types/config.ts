@@ -32,6 +32,9 @@ export interface ContactAddresses {
   id: number;
   address: string;
   phone: string;
+  nip: string | null;
+  bankAccountNumber: string | null;
+  bankName: string | null;
   social: SocialVisibility;
 }
 

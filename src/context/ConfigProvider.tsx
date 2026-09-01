@@ -22,6 +22,9 @@ const EMPTY_CONTACT_ADDRESSES: ContactAddresses = {
   id: 0,
   address: "",
   phone: "",
+  nip: null,
+  bankAccountNumber: null,
+  bankName: null,
   social: {
     facebook: false,
     youtube: false,
