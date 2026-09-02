@@ -82,7 +82,7 @@ function EventModal({ event, onClose }: { event: EventItem; onClose: () => void 
 function NewsModal({ news, onClose }: { news: NewsItem; onClose: () => void }) {
   return (
     <Modal onClose={onClose}>
-      {news.showImageOnFullContent && (
+      {news.showImageOnFullContent && news.image && (
         <img src={news.image} alt={news.title} className="mb-4 h-48 w-full rounded-lg object-cover" />
       )}
       <div className="mb-1.5 font-body text-xs font-semibold text-secondary">{formatNewsDate(news.date)}</div>
@@ -198,9 +198,11 @@ export function Articles() {
                 onClick={() => setSelectedNews(item)}
                 className="flex w-full gap-3 border-b border-border py-3.5 text-left transition-colors hover:bg-surface-muted"
               >
-                <div className="h-[60px] w-[82px] flex-shrink-0 overflow-hidden rounded">
-                  <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
-                </div>
+                {item.image && (
+                  <div className="h-[60px] w-[82px] flex-shrink-0 overflow-hidden rounded">
+                    <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
+                  </div>
+                )}
                 <div>
                   <div className="mb-0.5 font-body text-[0.7rem] font-semibold text-secondary">{formatNewsDate(item.date)}</div>
                   <h4 className="mb-0.5 font-heading text-[0.84rem] font-bold leading-snug text-primary">{item.title}</h4>

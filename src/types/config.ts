@@ -130,7 +130,7 @@ export interface NewsItem {
   date: string; // ISO date
   title: string;
   excerpt: string;
-  image: string;
+  image: string | null;
   body: string;
   showImageOnFullContent: boolean;
   author?: ArticleAuthor | null;
