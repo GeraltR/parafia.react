@@ -17,6 +17,10 @@ export function ContentPage({
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
+    setStatus("loading");
+    setTopics([]);
+    setSelectedId(null);
+
     fetchTopics()
       .then((data) => {
         setTopics(data);
@@ -27,8 +31,7 @@ export function ContentPage({
         console.error(`Nie udało się wczytać treści "${title}":`, error);
         setStatus("error");
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchTopics, title]);
 
   const selected = topics.find((topic) => topic.id === selectedId) ?? null;
 
