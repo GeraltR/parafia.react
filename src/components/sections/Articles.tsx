@@ -4,6 +4,8 @@ import { useConfig } from "../../context/configHooks";
 import { formatEventDay, formatEventTime, formatIntentionGroupHeader, formatNewsDate } from "../../utils/dates";
 import type { EventItem, MassIntention, MassIntentionsConfig, NewsItem } from "../../types/config";
 
+const DEFAULT_NEWS_IMAGE = "/img/elzbieta_czysta.jpg";
+
 interface IntentionDayGroup {
   date: string;
   isHoliday: boolean;
@@ -82,8 +84,12 @@ function EventModal({ event, onClose }: { event: EventItem; onClose: () => void 
 function NewsModal({ news, onClose }: { news: NewsItem; onClose: () => void }) {
   return (
     <Modal onClose={onClose}>
-      {news.showImageOnFullContent && news.image && (
-        <img src={news.image} alt={news.title} className="mb-4 h-48 w-full rounded-lg object-cover" />
+      {news.showImageOnFullContent && (
+        <img
+          src={news.image ?? DEFAULT_NEWS_IMAGE}
+          alt={news.title}
+          className="mb-4 h-48 w-full rounded-lg object-cover"
+        />
       )}
       <div className="mb-1.5 font-body text-xs font-semibold text-secondary">{formatNewsDate(news.date)}</div>
       <h2 className="mb-3 font-heading text-xl font-black text-primary">{news.title}</h2>
@@ -198,11 +204,13 @@ export function Articles() {
                 onClick={() => setSelectedNews(item)}
                 className="flex w-full gap-3 border-b border-border py-3.5 text-left transition-colors hover:bg-surface-muted"
               >
-                {item.image && (
-                  <div className="h-[60px] w-[82px] flex-shrink-0 overflow-hidden rounded">
-                    <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
-                  </div>
-                )}
+                <div className="h-[60px] w-[82px] flex-shrink-0 overflow-hidden rounded">
+                  <img
+                    src={item.image ?? DEFAULT_NEWS_IMAGE}
+                    alt={item.title}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
                 <div>
                   <div className="mb-0.5 font-body text-[0.7rem] font-semibold text-secondary">{formatNewsDate(item.date)}</div>
                   <h4 className="mb-0.5 font-heading text-[0.84rem] font-bold leading-snug text-primary">{item.title}</h4>
