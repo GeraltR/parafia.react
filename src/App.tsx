@@ -42,7 +42,19 @@ function AppShell() {
             </LegalPage>
           }
         />
-        <Route path="/deklaracja-dostepnosci" element={<LegalPage title="Deklaracja dostępności" />} />
+        <Route
+          path="/deklaracja-dostepnosci"
+          element={
+            <LegalPage title="Deklaracja dostępności">
+              {state.config.theme.accessibilityStatement && (
+                <div
+                  className="rich-content font-body leading-relaxed text-ink-soft"
+                  dangerouslySetInnerHTML={{ __html: state.config.theme.accessibilityStatement }}
+                />
+              )}
+            </LegalPage>
+          }
+        />
       </Routes>
       <ScrollToTopButton />
     </SiteThemeProvider>
