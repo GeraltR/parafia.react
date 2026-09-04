@@ -1,5 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { fetchLiturgiaTopics, fetchParafiaTopics } from "./api/contentTopics";
+import { trackPageView } from "./api/pageViews";
 import { ConfigProvider } from "./context/ConfigProvider";
 import { useConfigState } from "./context/configHooks";
 import { SiteThemeProvider } from "./theme/SiteThemeProvider";
@@ -10,6 +12,14 @@ import { ContentPage } from "./pages/ContentPage";
 
 function AppShell() {
   const state = useConfigState();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (state.status !== "ready") {
+      return;
+    }
+    trackPageView(location.pathname, document.referrer || null);
+  }, [location.pathname, state.status]);
 
   if (state.status === "loading") {
     return <div className="flex min-h-screen items-center justify-center font-body text-ink-soft">Wczytywanie…</div>;
