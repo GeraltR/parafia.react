@@ -29,7 +29,19 @@ function AppShell() {
         <Route path="/" element={<Home />} />
         <Route path="/parafia" element={<ContentPage title="Parafia" fetchTopics={fetchParafiaTopics} />} />
         <Route path="/liturgia" element={<ContentPage title="Liturgia" fetchTopics={fetchLiturgiaTopics} />} />
-        <Route path="/polityka-prywatnosci" element={<LegalPage title="Polityka prywatności" />} />
+        <Route
+          path="/polityka-prywatnosci"
+          element={
+            <LegalPage title="Polityka prywatności">
+              {state.config.theme.privacyPolicy && (
+                <div
+                  className="rich-content font-body leading-relaxed text-ink-soft"
+                  dangerouslySetInnerHTML={{ __html: state.config.theme.privacyPolicy }}
+                />
+              )}
+            </LegalPage>
+          }
+        />
         <Route path="/deklaracja-dostepnosci" element={<LegalPage title="Deklaracja dostępności" />} />
       </Routes>
       <ScrollToTopButton />
