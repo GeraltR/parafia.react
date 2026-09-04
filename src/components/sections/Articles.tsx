@@ -171,7 +171,7 @@ export function Articles() {
       <div className="mx-auto max-w-[1180px] px-6">
         <div className="grid gap-9 md:grid-cols-3 md:gap-11">
           <div>
-            <ColumnHeader title="Najbliższe wydarzenia" />
+            <ColumnHeader title="Ważne informacje" />
             {events.map((event) => {
               const { day, month } = formatEventDay(event.date);
               return (
