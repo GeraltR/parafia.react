@@ -7,6 +7,7 @@ import { useConfigState } from "./context/configHooks";
 import { SiteThemeProvider } from "./theme/SiteThemeProvider";
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
 import { CookieNotice } from "./components/CookieNotice";
+import { VersionUpdateModal } from "./components/VersionUpdateModal";
 import { Home } from "./pages/Home";
 import { LegalPage } from "./pages/LegalPage";
 import { ContentPage } from "./pages/ContentPage";
@@ -69,6 +70,7 @@ function AppShell() {
       </Routes>
       <ScrollToTopButton />
       <CookieNotice />
+      <VersionUpdateModal />
     </SiteThemeProvider>
   );
 }
