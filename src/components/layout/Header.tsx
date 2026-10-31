@@ -6,16 +6,25 @@ import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { useConfig } from "../../context/configHooks";
-import { isInternalRoute } from "../../utils/links";
+import { isInternalRoute, toRouterHref } from "../../utils/links";
 import type { NavItem } from "../../types/config";
 
+/** Props for MUI items rendered as links: router `Link` for internal routes and home-page anchors, plain `<a>` otherwise. */
+function linkProps(rawHref: string) {
+  const href = toRouterHref(rawHref);
+  return isInternalRoute(href)
+    ? { component: Link, to: href }
+    : { component: "a" as const, href };
+}
+
 function NavLinkContent({ item, className, onClick }: { item: NavItem; className: string; onClick?: () => void }) {
-  return isInternalRoute(item.href) ? (
-    <Link to={item.href} className={className} onClick={onClick}>
+  const href = toRouterHref(item.href);
+  return isInternalRoute(href) ? (
+    <Link to={href} className={className} onClick={onClick}>
       {item.label}
     </Link>
   ) : (
-    <a href={item.href} className={className} onClick={onClick}>
+    <a href={href} className={className} onClick={onClick}>
       {item.label}
     </a>
   );
@@ -46,9 +55,7 @@ function DesktopNavItem({ item }: { item: NavItem }) {
         {item.children!.map((child) => (
           <MenuItem
             key={`nav-child-${child.id}`}
-            component={isInternalRoute(child.href) ? Link : "a"}
-            to={isInternalRoute(child.href) ? child.href : undefined}
-            href={!isInternalRoute(child.href) ? child.href : undefined}
+            {...linkProps(child.href)}
             onClick={() => setAnchorEl(null)}
           >
             {child.label}
@@ -66,9 +73,7 @@ function MobileNavItem({ item, onNavigate }: { item: NavItem; onNavigate: () => 
   if (!hasChildren) {
     return (
       <ListItemButton
-        component={isInternalRoute(item.href) ? Link : "a"}
-        to={isInternalRoute(item.href) ? item.href : undefined}
-        href={!isInternalRoute(item.href) ? item.href : undefined}
+        {...linkProps(item.href)}
         onClick={onNavigate}
       >
         <ListItemText primary={item.label} />
@@ -87,9 +92,7 @@ function MobileNavItem({ item, onNavigate }: { item: NavItem; onNavigate: () => 
           {item.children!.map((child) => (
             <ListItemButton
               key={`mobile-nav-child-${child.id}`}
-              component={isInternalRoute(child.href) ? Link : "a"}
-              to={isInternalRoute(child.href) ? child.href : undefined}
-              href={!isInternalRoute(child.href) ? child.href : undefined}
+              {...linkProps(child.href)}
               onClick={onNavigate}
               sx={{ pl: 4 }}
             >

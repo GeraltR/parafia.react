@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useConfig } from "../../context/configHooks";
 import { SocialLinksRow } from "../SocialLinksRow";
-import { isInternalRoute } from "../../utils/links";
+import { isInternalRoute, toRouterHref } from "../../utils/links";
 
 const VIRTUAL_PARISH_URL_B64 =
   "aHR0cHM6Ly9zenAucGFyYWZpYS1zemN6YWtvd2EucGw=";
@@ -66,6 +66,7 @@ export function Footer() {
             <ul className="space-y-1.5 font-body text-[0.8rem]">
               {navbar.items
                 .filter((item) => item.href !== "/")
+                .map((item) => ({ ...item, href: toRouterHref(item.href) }))
                 .map((item) => (
                   <li key={`footer-nav-${item.id}`}>
                     {isInternalRoute(item.href) ? (

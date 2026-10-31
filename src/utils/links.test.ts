@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isInternalRoute } from "./links";
+import { isInternalRoute, toRouterHref } from "./links";
 
 describe("isInternalRoute", () => {
   it("returns true for a path starting with a single slash", () => {
@@ -16,5 +16,16 @@ describe("isInternalRoute", () => {
 
   it("returns false for a relative path without a leading slash", () => {
     expect(isInternalRoute("o-nas")).toBe(false);
+  });
+});
+
+describe("toRouterHref", () => {
+  it("points a section anchor at the home page", () => {
+    expect(toRouterHref("#kontakt")).toBe("/#kontakt");
+  });
+
+  it("leaves routes and external URLs unchanged", () => {
+    expect(toRouterHref("/parafia")).toBe("/parafia");
+    expect(toRouterHref("https://example.com")).toBe("https://example.com");
   });
 });

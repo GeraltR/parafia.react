@@ -11,6 +11,8 @@ import { VersionUpdateModal } from "./components/VersionUpdateModal";
 import { Home } from "./pages/Home";
 import { LegalPage } from "./pages/LegalPage";
 import { ContentPage } from "./pages/ContentPage";
+import { EventsPage, NewsPage } from "./pages/ArticlesPage";
+import { EVENTS_PATH, NEWS_PATH } from "./components/articles/ArticleItems";
 
 function AppShell() {
   const state = useConfigState();
@@ -41,6 +43,8 @@ function AppShell() {
         <Route path="/" element={<Home />} />
         <Route path="/parafia" element={<ContentPage title="Parafia" fetchTopics={fetchParafiaTopics} />} />
         <Route path="/liturgia" element={<ContentPage title="Liturgia" fetchTopics={fetchLiturgiaTopics} />} />
+        <Route path={`${EVENTS_PATH}/:id?`} element={<EventsPage />} />
+        <Route path={`${NEWS_PATH}/:id?`} element={<NewsPage />} />
         <Route
           path="/polityka-prywatnosci"
           element={

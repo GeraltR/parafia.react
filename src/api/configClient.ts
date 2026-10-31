@@ -11,6 +11,28 @@ export async function fetchSection<T>(path: string): Promise<T> {
   return (Object.prototype.hasOwnProperty.call(json, "data") ? json.data : json) as T;
 }
 
+export interface Paginated<T> {
+  data: T[];
+  currentPage: number;
+  lastPage: number;
+}
+
+interface LaravelPaginatedResponse<T> {
+  data: T[];
+  meta: { current_page: number; last_page: number };
+}
+
+export async function fetchPaginated<T>(path: string): Promise<Paginated<T>> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers: { Accept: "application/json" },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to load "${path}" (HTTP ${response.status})`);
+  }
+  const json = (await response.json()) as LaravelPaginatedResponse<T>;
+  return { data: json.data, currentPage: json.meta.current_page, lastPage: json.meta.last_page };
+}
+
 export class ApiError extends Error {
   readonly status: number;
   readonly errors?: Record<string, string[]>;

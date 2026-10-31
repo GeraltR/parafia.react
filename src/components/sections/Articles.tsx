@@ -1,10 +1,16 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Modal } from "../Modal";
 import { useConfig } from "../../context/configHooks";
-import { formatEventDay, formatEventTime, formatIntentionGroupHeader, formatNewsDate } from "../../utils/dates";
-import type { EventItem, MassIntention, MassIntentionsConfig, NewsItem } from "../../types/config";
-
-const DEFAULT_NEWS_IMAGE = "/img/elzbieta_czysta.jpg";
+import { formatIntentionGroupHeader } from "../../utils/dates";
+import type { MassIntention, MassIntentionsConfig } from "../../types/config";
+import {
+  EVENTS_PATH,
+  EventListItem,
+  NEWS_PATH,
+  NewsListItem,
+  SHOW_MORE_BUTTON_CLASS,
+} from "../articles/ArticleItems";
 
 interface IntentionDayGroup {
   date: string;
@@ -54,54 +60,6 @@ function ColumnHeader({ title }: { title: string }) {
     <div className="mb-5 flex items-baseline justify-between border-b-2 border-primary pb-2.5">
       <h2 className="font-heading text-[1.05rem] font-black tracking-tight text-primary">{title}</h2>
     </div>
-  );
-}
-
-function EventModal({ event, onClose }: { event: EventItem; onClose: () => void }) {
-  const { day, month } = formatEventDay(event.date);
-  return (
-    <Modal onClose={onClose}>
-      <div className="mb-3 flex items-center gap-3">
-        <div className="w-[50px] flex-shrink-0 rounded bg-primary px-1.5 py-1.5 text-center text-white">
-          <div className="font-heading text-[1.35rem] font-black leading-none">{day}</div>
-          <div className="mt-0.5 font-body text-[0.63rem] font-bold uppercase tracking-wider text-secondary-light">{month}</div>
-        </div>
-        <div className="font-body text-sm font-semibold text-secondary">{formatEventTime(event.date, event.time)}</div>
-      </div>
-      <h2 className="mb-3 font-heading text-xl font-black text-primary">{event.title}</h2>
-      {event.author && (
-        <p className="mb-3 font-body text-xs text-ink-soft">{event.author.name}</p>
-      )}
-      {event.body ? (
-        <div className="rich-content font-body text-ink" dangerouslySetInnerHTML={{ __html: event.body }} />
-      ) : (
-        <p className="font-body text-sm text-ink-soft">{event.description}</p>
-      )}
-    </Modal>
-  );
-}
-
-function NewsModal({ news, onClose }: { news: NewsItem; onClose: () => void }) {
-  return (
-    <Modal onClose={onClose}>
-      {news.showImageOnFullContent && (
-        <img
-          src={news.image ?? DEFAULT_NEWS_IMAGE}
-          alt={news.title}
-          className="mb-4 h-48 w-full rounded-lg object-cover"
-        />
-      )}
-      <div className="mb-1.5 font-body text-xs font-semibold text-secondary">{formatNewsDate(news.date)}</div>
-      <h2 className="mb-3 font-heading text-xl font-black text-primary">{news.title}</h2>
-      {news.author && (
-        <p className="mb-3 font-body text-xs text-ink-soft">{news.author.name}</p>
-      )}
-      {news.body ? (
-        <div className="rich-content font-body text-ink" dangerouslySetInnerHTML={{ __html: news.body }} />
-      ) : (
-        <p className="font-body text-sm text-ink-soft">{news.excerpt}</p>
-      )}
-    </Modal>
   );
 }
 
@@ -159,8 +117,6 @@ const INTENTIONS_INITIAL_LINES = 10;
 
 export function Articles() {
   const { events, news, massIntentions } = useConfig();
-  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
-  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const [showIntentionsModal, setShowIntentionsModal] = useState(false);
   const intentionGroups = groupIntentionsByDay(massIntentions.items);
   const initialIntentionGroups = takeInitialGroups(intentionGroups, INTENTIONS_INITIAL_LINES);
@@ -172,52 +128,22 @@ export function Articles() {
         <div className="grid gap-9 md:grid-cols-3 md:gap-11">
           <div>
             <ColumnHeader title="Ważne informacje" />
-            {events.map((event) => {
-              const { day, month } = formatEventDay(event.date);
-              return (
-                <button
-                  key={`event-${event.id}`}
-                  type="button"
-                  onClick={() => setSelectedEvent(event)}
-                  className="flex w-full gap-3 border-b border-border py-3.5 text-left transition-colors hover:bg-surface-muted"
-                >
-                  <div className="w-[50px] flex-shrink-0 rounded bg-primary px-1.5 py-1.5 text-center text-white">
-                    <div className="font-heading text-[1.35rem] font-black leading-none">{day}</div>
-                    <div className="mt-0.5 font-body text-[0.63rem] font-bold uppercase tracking-wider text-secondary-light">{month}</div>
-                  </div>
-                  <div>
-                    <div className="mb-0.5 font-body text-[0.72rem] font-semibold text-secondary">{formatEventTime(event.date, event.time)}</div>
-                    <h4 className="mb-0.5 font-heading text-[0.85rem] font-bold leading-snug text-primary">{event.title}</h4>
-                    <p className="font-body text-[0.74rem] leading-snug text-ink-soft">{event.description}</p>
-                  </div>
-                </button>
-              );
-            })}
+            {events.map((event) => (
+              <EventListItem key={`event-${event.id}`} event={event} to={`${EVENTS_PATH}/${event.id}`} />
+            ))}
+            <Link to={EVENTS_PATH} className={SHOW_MORE_BUTTON_CLASS}>
+              Pokaż więcej
+            </Link>
           </div>
 
           <div>
             <ColumnHeader title="Aktualności" />
             {news.map((item) => (
-              <button
-                key={`news-${item.id}`}
-                type="button"
-                onClick={() => setSelectedNews(item)}
-                className="flex w-full gap-3 border-b border-border py-3.5 text-left transition-colors hover:bg-surface-muted"
-              >
-                <div className="h-[60px] w-[82px] flex-shrink-0 overflow-hidden rounded">
-                  <img
-                    src={item.image ?? DEFAULT_NEWS_IMAGE}
-                    alt={item.title}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div>
-                  <div className="mb-0.5 font-body text-[0.7rem] font-semibold text-secondary">{formatNewsDate(item.date)}</div>
-                  <h4 className="mb-0.5 font-heading text-[0.84rem] font-bold leading-snug text-primary">{item.title}</h4>
-                  <p className="font-body text-[0.74rem] leading-snug text-ink-soft">{item.excerpt}</p>
-                </div>
-              </button>
+              <NewsListItem key={`news-${item.id}`} news={item} to={`${NEWS_PATH}/${item.id}`} />
             ))}
+            <Link to={NEWS_PATH} className={SHOW_MORE_BUTTON_CLASS}>
+              Pokaż więcej
+            </Link>
           </div>
 
           <div>
@@ -234,7 +160,7 @@ export function Articles() {
               <button
                 type="button"
                 onClick={() => setShowIntentionsModal(true)}
-                className="mt-3.5 block w-full rounded bg-primary py-2.5 text-center font-body text-[0.76rem] font-bold uppercase tracking-wider text-white transition-colors hover:bg-primary-dark"
+                className={SHOW_MORE_BUTTON_CLASS}
               >
                 {`Pokaż więcej (+${hiddenIntentionDays} dni)`}
               </button>
@@ -243,8 +169,6 @@ export function Articles() {
         </div>
       </div>
 
-      {selectedEvent && <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
-      {selectedNews && <NewsModal news={selectedNews} onClose={() => setSelectedNews(null)} />}
       {showIntentionsModal && (
         <IntentionsModal
           groups={intentionGroups}
