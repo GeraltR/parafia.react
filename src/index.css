@@ -100,6 +100,49 @@ h4 {
   border-radius: 0.5rem;
 }
 
+/* Image alignment set in the admin editor: floated images let the text wrap around them. */
+.rich-content {
+  display: flow-root;
+}
+
+.rich-content h1,
+.rich-content h2,
+.rich-content h3 {
+  clear: both;
+}
+
+.rich-content img[data-align="left"] {
+  float: left;
+  /* Stack below an earlier photo on the same side instead of squeezing the text. */
+  clear: left;
+  max-width: 60%;
+  margin: 0.25em 1.25em 0.75em 0;
+}
+
+.rich-content img[data-align="right"] {
+  float: right;
+  clear: right;
+  max-width: 60%;
+  margin: 0.25em 0 0.75em 1.25em;
+}
+
+.rich-content img[data-align="center"] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Too narrow for text beside a photo: stack instead of wrapping. */
+@media (max-width: 639px) {
+  .rich-content img[data-align="left"],
+  .rich-content img[data-align="right"] {
+    float: none;
+    display: block;
+    max-width: 100%;
+    margin: 0.75em auto;
+  }
+}
+
 .rich-content a {
   color: var(--color-secondary);
   text-decoration: underline;
