@@ -4,6 +4,7 @@ import { sendContactMessage } from "../../api/contactMessage";
 import { ApiError } from "../../api/configClient";
 import { useConfig } from "../../context/configHooks";
 import { executeRecaptcha, loadRecaptchaScript } from "../../utils/recaptcha";
+import { BankAccountsInfo } from "./BankAccountsInfo";
 
 const FIELD_CLASSES =
   "w-full rounded border border-border px-3.5 py-2.5 font-body text-[0.86rem] text-ink outline-none transition-colors focus:border-primary";
@@ -42,21 +43,7 @@ function ContactInfoColumn() {
         <p className="font-body text-[0.86rem] text-ink">{contactAddresses.address}</p>
       </div>
 
-      {(contactAddresses.nip || contactAddresses.bankAccountNumber) && (
-        <div className="grid gap-1 font-body text-[0.82rem] text-ink">
-          {contactAddresses.nip && (
-            <p>
-              <span className="font-semibold">NIP:</span> {contactAddresses.nip}
-            </p>
-          )}
-          {contactAddresses.bankAccountNumber && (
-            <p>
-              <span className="font-semibold">Nr rachunku:</span> {contactAddresses.bankAccountNumber}
-              {contactAddresses.bankName && ` (${contactAddresses.bankName})`}
-            </p>
-          )}
-        </div>
-      )}
+      <BankAccountsInfo contact={contactAddresses} />
     </div>
   );
 }
