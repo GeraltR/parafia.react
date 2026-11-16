@@ -27,9 +27,9 @@ function parseIsoDate(iso: string): Date {
   return new Date(`${iso}T00:00:00`);
 }
 
-export function formatEventDay(iso: string): { day: number; month: string } {
+export function formatEventDay(iso: string): { day: number; month: string; year?: number } {
   const date = parseIsoDate(iso);
-  return { day: date.getDate(), month: MONTH_SHORT_PL[date.getMonth()] };
+  return { day: date.getDate(), month: MONTH_SHORT_PL[date.getMonth()], year: date.getFullYear() };
 }
 
 export function formatEventTime(iso: string, time: string): string {
